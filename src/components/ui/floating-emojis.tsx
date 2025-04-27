@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 
 interface FloatingEmojisProps {
@@ -6,44 +7,50 @@ interface FloatingEmojisProps {
 }
 
 const FloatingEmojis: React.FC<FloatingEmojisProps> = ({ 
-  emojis, 
-  count = 10 
+  emojis,
+  count = 10
 }) => {
-  const [floatingItems, setFloatingItems] = useState<React.ReactNode[]>([]);
-
+  const [floatingEmojis, setFloatingEmojis] = useState<Array<{
+    id: number;
+    emoji: string;
+    x: number;
+    y: number;
+    size: number;
+    duration: number;
+    delay: number;
+  }>>([]);
+  
   useEffect(() => {
-    const newItems = [];
+    const newEmojis = Array.from({ length: count }, (_, i) => ({
+      id: i,
+      emoji: emojis[Math.floor(Math.random() * emojis.length)],
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 1.5 + 0.8,
+      duration: Math.random() * 20 + 20,
+      delay: -Math.random() * 20
+    }));
     
-    for (let i = 0; i < count; i++) {
-      const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
-      const delay = Math.random() * 10;
-      const duration = 7 + Math.random() * 15;
-      const size = 16 + Math.random() * 24;
-      const leftPos = Math.random() * 100;
-      
-      newItems.push(
-        <div 
-          key={i}
-          className="absolute pointer-events-none"
+    setFloatingEmojis(newEmojis);
+  }, [emojis, count]);
+  
+  return (
+    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+      {floatingEmojis.map((item) => (
+        <div
+          key={item.id}
+          className="absolute opacity-70"
           style={{
-            left: `${leftPos}%`,
-            bottom: '-20px',
-            fontSize: `${size}px`,
-            animation: `float ${duration}s ease-in-out ${delay}s infinite`,
-            opacity: 0.6 + Math.random() * 0.4,
+            left: `${item.x}%`,
+            top: `${item.y}%`,
+            fontSize: `${item.size}rem`,
+            animation: `float ${item.duration}s ease-in-out infinite`,
+            animationDelay: `${item.delay}s`,
           }}
         >
-          {randomEmoji}
+          {item.emoji}
         </div>
-      );
-    }
-    
-    setFloatingItems(newItems);
-  }, [emojis, count]);
-
-  return (
-    <div className="absolute inset-0 overflow-hidden z-0">
-      {floatingItems}
+      ))}
     </div>
   );
 };

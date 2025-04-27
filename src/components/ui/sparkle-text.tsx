@@ -1,56 +1,68 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState, useCallback } from 'react';
 
 interface SparkleTextProps {
   text: string;
-  className?: string;
+  color?: string;
 }
 
-const SparkleText: React.FC<SparkleTextProps> = ({ text, className = "" }) => {
-  const [sparkles, setSparkles] = useState<React.ReactNode[]>([]);
-
-  const createSparkle = () => {
-    const sparkleColors = ['#ffb6c1', '#ffd700', '#9b87f5', '#87cefa'];
-    
-    return {
-      id: Math.random(),
-      color: sparkleColors[Math.floor(Math.random() * sparkleColors.length)],
-      size: Math.random() * 10 + 5,
-      style: {
-        top: `${Math.random() * 100}%`,
-        left: `${Math.random() * 100}%`,
-        zIndex: 2,
-      },
+const SparkleText: React.FC<SparkleTextProps> = ({ 
+  text,
+  color = '#ffb6c1'
+}) => {
+  const [sparkles, setSparkles] = useState<Array<{
+    id: number;
+    x: number;
+    y: number;
+    size: number;
+  }>>([]);
+  
+  const createSparkle = useCallback((x: number, y: number) => {
+    const sparkle = {
+      id: Date.now(),
+      x,
+      y,
+      size: Math.random() * 10 + 5
     };
-  };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const sparkle = createSparkle();
-      setSparkles(prev => [...prev, 
-        <span 
-          key={sparkle.id} 
-          className="sparkle" 
-          style={{
-            ...sparkle.style,
-            backgroundColor: sparkle.color,
-            width: `${sparkle.size}px`,
-            height: `${sparkle.size}px`,
-            borderRadius: '50%',
-          }}
-        />
-      ]);
-
-      setTimeout(() => {
-        setSparkles(prev => prev.filter((_, i) => i !== 0));
-      }, 2000);
-    }, 300);
-
-    return () => clearInterval(interval);
+    
+    setSparkles(current => [...current, sparkle]);
+    
+    // Remove sparkle after animation
+    setTimeout(() => {
+      setSparkles(current => current.filter(s => s.id !== sparkle.id));
+    }, 1000);
   }, []);
+  
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    // Create sparkle only occasionally for performance
+    if (Math.random() > 0.9) {
+      createSparkle(x, y);
+    }
+  }, [createSparkle]);
 
   return (
-    <div className={`relative inline-block ${className}`}>
-      {sparkles}
+    <div 
+      className="relative inline-block cursor-default"
+      onMouseMove={handleMouseMove}
+    >
+      {sparkles.map(sparkle => (
+        <div
+          key={sparkle.id}
+          className="sparkle"
+          style={{
+            left: `${sparkle.x}px`,
+            top: `${sparkle.y}px`,
+            width: `${sparkle.size}px`,
+            height: `${sparkle.size}px`,
+            backgroundColor: color,
+            borderRadius: '50%'
+          }}
+        />
+      ))}
       <span className="relative z-10">{text}</span>
     </div>
   );

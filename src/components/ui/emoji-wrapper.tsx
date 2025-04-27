@@ -1,22 +1,22 @@
+
 import React from 'react';
 
 interface EmojiWrapperProps {
   emoji: string;
-  className?: string;
   animationClass?: 'float' | 'pulse' | 'wiggle' | 'sparkle';
+  className?: string;
 }
 
 const EmojiWrapper: React.FC<EmojiWrapperProps> = ({ 
   emoji, 
-  className = "", 
-  animationClass = "float" 
+  animationClass = 'float',
+  className = ''
 }) => {
   return (
-    <span 
-      className={`emoji text-2xl inline-block cursor-pointer animate-${animationClass} ${className}`}
-      role="img"
-      aria-label="emoji"
-    >
+    <span className={`emoji inline-block text-2xl ${animationClass === 'float' ? 'animate-float' : 
+      animationClass === 'pulse' ? 'animate-pulse' : 
+      animationClass === 'wiggle' ? 'animate-wiggle' : ''
+    } ${className}`}>
       {emoji}
     </span>
   );
