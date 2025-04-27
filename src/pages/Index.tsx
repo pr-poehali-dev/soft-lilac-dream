@@ -1,12 +1,73 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import React, { useState } from 'react';
+import EmojiWrapper from '@/components/ui/emoji-wrapper';
+import FloatingEmojis from '@/components/ui/floating-emojis';
+import SparkleText from '@/components/ui/sparkle-text';
+import { Heart } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 
 const Index = () => {
+  const [showHeart, setShowHeart] = useState(false);
+  
+  const emojis = ['✨', '🐱', '❤️', '🌸', '🌟', '💜', '😊', '🦄', '🍬'];
+  
+  const toggleHeart = () => {
+    setShowHeart(!showHeart);
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4 color-black text-black">Добро пожаловать!</h1>
-        <p className="text-xl text-gray-600">тут будет отображаться ваш проект</p>
-      </div>
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-b from-lavender-light to-background flex flex-col items-center justify-center px-4">
+      <FloatingEmojis emojis={emojis} count={15} />
+      
+      <Card className="w-full max-w-2xl p-8 rounded-xl shadow-lg bg-white/80 backdrop-blur-md border-lavender z-10">
+        <div className="text-center">
+          <div className="mb-6 flex items-center justify-center gap-3">
+            <EmojiWrapper emoji="✨" animationClass="sparkle" />
+            <h1 className="text-5xl font-bold text-lavender-dark">
+              <SparkleText text="Это тебе, лучик" />
+            </h1>
+            <EmojiWrapper emoji="✨" animationClass="sparkle" />
+          </div>
+          
+          <p className="text-xl text-foreground/80 max-w-md mx-auto mb-6">
+            Уютное место, наполненное теплом и радостью, 
+            созданное специально для тебя
+          </p>
+          
+          <div className="flex flex-wrap justify-center gap-4 mb-8">
+            {emojis.map((emoji, index) => (
+              <EmojiWrapper 
+                key={index} 
+                emoji={emoji} 
+                animationClass={
+                  index % 4 === 0 ? 'float' : 
+                  index % 4 === 1 ? 'pulse' : 
+                  index % 4 === 2 ? 'wiggle' : 'sparkle'
+                }
+                className="text-3xl"
+              />
+            ))}
+          </div>
+          
+          <Button 
+            onClick={toggleHeart}
+            className="bg-lavender hover:bg-lavender-dark text-white font-semibold px-6 py-2 rounded-full transition-all transform hover:scale-105"
+          >
+            Нажми меня
+          </Button>
+          
+          {showHeart && (
+            <div className="mt-8 animate-float">
+              <Heart className="w-20 h-20 mx-auto text-accent fill-accent" />
+              <p className="mt-4 text-lg text-accent-foreground">С любовью для тебя!</p>
+            </div>
+          )}
+        </div>
+      </Card>
+      
+      <footer className="mt-8 text-center text-sm text-foreground/60 z-10">
+        <p>С заботой и нежностью, 2025 💜</p>
+      </footer>
     </div>
   );
 };
