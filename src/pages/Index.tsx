@@ -59,7 +59,11 @@ const Index = () => {
           {showHeart && (
             <div className="mt-8 animate-float">
               <Heart className="w-20 h-20 mx-auto text-accent fill-accent" />
-              <p className="mt-4 text-lg text-accent-foreground">С любовью для тебя!</p>
+              <p className="mt-4 text-lg text-accent-foreground leading-relaxed max-w-lg mx-auto">
+                И даже если я вдруг умру, не грусти, это лишь новый этап моей жизни. 
+                Может я не всегда могу вечно давать тебе тепло, но я буду башлять тебе чем-то свыше. 
+                Останусь тебе чем-то тёплым, прости если я могу быть от мира далёким
+              </p>
             </div>
           )}
         </div>

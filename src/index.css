@@ -93,7 +93,6 @@
 
   body {
     @apply bg-background text-foreground font-nunito;
-    font-family: 'Nunito', sans-serif;
   }
 }
 
