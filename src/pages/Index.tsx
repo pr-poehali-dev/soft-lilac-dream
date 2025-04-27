@@ -30,9 +30,9 @@ const Index = () => {
             <EmojiWrapper emoji="✨" animationClass="sparkle" />
           </div>
           
-          <p className="text-xl text-foreground/80 max-w-md mx-auto mb-6">
-            Уютное место, наполненное теплом и радостью, 
-            созданное специально для тебя
+          <p className="text-xl italic text-foreground/80 max-w-md mx-auto mb-6 font-serif">
+            Ты так хочешь раскрасить весь мир, но мне нужны краски.
+            Убегу с тобой от всего, что с тобой натворили
           </p>
           
           <div className="flex flex-wrap justify-center gap-4 mb-8">
